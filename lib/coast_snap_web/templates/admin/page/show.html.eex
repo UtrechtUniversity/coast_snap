@@ -1,0 +1,22 @@
+<h2>Page <%= @page.id %></h2>
+<hr />
+
+<div class="show-content">
+    <h3><%= @page.nav_nl %></h3>
+    <%= raw(@page.content_nl) %>
+</div>
+
+<div class="show-content">
+    <h3><%= @page.nav_en %></h3>
+    <%= raw(@page.content_en) %>
+</div>
+
+<div class="show-content">
+    <h3><%= @page.nav_ge %></h3>
+    <%= raw(@page.content_ge) %>
+</div>
+
+<div class="admin-button-row">
+    <%= link "Back", to: "/admin/pages", class: "button" %>
+    <%= link "Edit", to: "/admin/pages/#{@page.id}/edit", class: "button" %>
+</div>

@@ -1,0 +1,5 @@
+<div class="page">
+
+    <%= raw(show(@page, @country)) %>
+
+</div>

@@ -1,0 +1,123 @@
+header.site-header {
+  background: $white;
+
+  .logo-bar {
+    border-top: 0.75rem solid $primary-color;
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+    position: relative;
+    z-index: 3;
+    background: $white;
+  }
+
+  .featured-image {
+    position: relative;
+    z-index: 3;
+    img {
+      width: 100%;
+    }
+  }
+
+  .logo {
+    img {
+      width: 10rem;
+      @include breakpoint(medium) {
+        width: 18rem;
+      }
+    }
+  }
+
+  .lang {
+    a {
+      margin-left: 0.5rem;
+      img {
+        width: 1.55rem;
+      }
+    }
+    @include breakpoint(medium) {
+      a {
+        margin-left: 0.75rem;
+        img {
+          width: 2rem;
+        }
+      }
+    }
+  }
+
+  .top-bar {
+    padding: 0;
+    @include breakpoint(medium) {
+      padding: 0 1rem;
+    }
+    .left {
+      flex: 1;
+    }
+    a {
+      color: $white;
+      font-weight: $global-weight-bold;
+    }
+    .right {
+      padding-right: 1rem;
+    }
+    .title-bar {
+      position: relative;
+      z-index: 3;
+      padding: 1rem 0.5rem;
+      &:after {
+        display: block;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 6px;
+        border-bottom-width: 6px;
+        content: '';
+        border-bottom-width: 0;
+        border-color: $white transparent transparent;
+        right: 5px;
+        left: auto;
+        margin-top: 2px;
+        margin-left: 0.25rem;
+      }
+      &.open {
+        &:after {
+          transform: rotate(180deg);
+        }
+      }
+    }
+    #main-nav {
+      z-index: 2;
+      position: relative;
+      li {
+        a {
+
+        }
+        &.active,
+        &:hover {
+          & > a {
+            background: lighten($black, 10%) !important;
+          }
+        }
+      }
+      @include breakpoint(small only) {
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        padding: 0.5rem 0;
+        width: 15rem;
+        li {
+          a {
+            &:before {
+              content: '-';
+              margin-right: 1rem;
+            }
+            padding: 0.7rem 1.2rem;
+          }
+        }
+        .submenu {
+          background: lighten($black, 15%);
+        }
+      }
+    }
+  }
+}

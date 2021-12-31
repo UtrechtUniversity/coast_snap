@@ -1,0 +1,40 @@
+<div class="admin-upload-form">
+    <h3>Upload new file</h3>
+
+    <%= form_for @changeset, Routes.upload_path(@conn, :create), [multipart: true, id: "upload"], fn f -> %>
+        <%= file_input f, :upload, class: "snap", id: "upload-btn", capture: "environment" %>
+        <%= error_tag f, :upload %>
+
+        <%= submit "Save", class: "button" %>
+    <% end %>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>filename</th>
+            <th>content</th>
+            <th>creation date</th>
+            <th>action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for record <- @uploads.list do %>
+        <tr>
+            <td><%= record.id %></td>
+            <td><%= record.filename |> truncate(50) # truncate can be found in helpers %></td>
+            <td><%= record.content_type |> truncate(40) %></td>
+            <td><%= record.inserted_at %></td>
+            <td>
+                <%= link "show", to: "/admin/uploads/#{ record.id }?page=#{@page}" %> |
+                <%= link "copy URL", to: "#", onclick: "copyToClipboard(\"/uploads/#{ record.filename }\")" %> |
+                <%= link "destroy", to: "/admin/uploads/#{ record.id }", method: :delete, data: [confirm: "Are you sure?"] %>
+            </td>
+        </tr>
+        <% end %>
+    </tbody>
+
+</table>
+
+<%= CoastSnapWeb.Helpers.PaginationHelper.render(@conn, @uploads, class: "paginator") %>

@@ -1,0 +1,332 @@
+/* This file is for your main application css. */
+// @import "./phoenix.css";
+@import "../node_modules/nprogress/nprogress.css";
+@import "~foundation-sites/scss/foundation";
+@import "~motion-ui/motion-ui.scss";
+@import "settings";
+@include foundation-everything();
+@import "header";
+@import "content";
+
+/* LiveView specific classes for your customizations */
+.invalid-feedback {
+  color: #a94442;
+  display: block;
+  margin: -1rem 0 2rem;
+}
+
+.phx-no-feedback.invalid-feedback, .phx-no-feedback .invalid-feedback {
+  display: none;
+}
+
+.phx-click-loading {
+  opacity: 0.5;
+  transition: opacity 1s ease-out;
+}
+
+.phx-disconnected{
+  cursor: wait;
+}
+.phx-disconnected *{
+  pointer-events: none;
+}
+
+.phx-modal {
+  opacity: 1!important;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+.phx-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.phx-modal-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.phx-modal-close:hover,
+.phx-modal-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* Alerts and form errors */
+p.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+p.alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+p.alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+p.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+p.alert p {
+  margin-bottom: 0;
+}
+p.alert:empty {
+  display: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container{
+  margin: 0;
+  padding: 0;
+}
+
+.index {
+  margin: 0;
+  padding: 0;
+
+  h2 {
+      text-align: center;
+  }
+
+  div.row {
+    padding: 0 0.7rem;
+  }
+
+  a.follow {
+      display: block;
+  }
+
+  p {
+      margin: 1rem 0;
+  }
+
+}
+
+div.snap-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  border-top: $primary-color 0.75rem solid;
+  background-color: #ececec;
+  // background-image: url('/images/logo-name-bw.png');
+  // background-repeat: no-repeat;
+  // background-position: center 3%;
+  // background-size: 80%;
+
+  .alert {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    margin: 0;
+  }
+}
+
+div.snap {
+  text-align: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+
+  input.snap {
+    visibility: hidden;
+    display: none;
+  }
+
+  .camera {
+    opacity: 0.3;
+    padding: 2rem;
+    border: 3px dashed rgba(0,0,0,0.5);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .fake-input {
+    cursor: pointer;
+    &::before {
+      content: '';
+      height: 10rem;
+      background-image: url('/images/photo-camera.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 50%;
+      opacity: 0.3;
+      padding: 2rem;
+      border: 3px dashed rgba(0,0,0,0.5);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    span {
+      margin: 0;
+      font-weight: bold;
+      padding: 1.75rem 4rem;
+      border-radius: 3px;
+      border-bottom: 5px solid darken($primary-color, 5%);
+    }
+  }
+}
+
+.logo {
+  width: 10rem;
+  margin: 0 1rem 1rem 1rem;
+}
+
+@media (max-width: 40.0rem) {
+  body {
+  }
+}
+
+.buttons {
+    margin-top: 2rem;
+}
+
+ul.paginator {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+
+    li {
+        margin: 0 0.35rem;
+        float: left;
+    }
+
+    li.active a {
+        color: red;
+    }
+
+    li[disabled] a {
+        opacity: .4;
+        pointer-events: none;
+    }
+}
+
+img.square-logo {
+    width: 100px !important;
+    height: 100px !important;
+}
+
+fieldset.page {
+    margin-bottom: 5rem;
+    textarea {
+        height: 30rem;
+    }
+}
+
+div.admin-button-row {
+    margin-top: 3rem;
+}
+
+span.no-delete {
+    color: lightgrey;
+}
+
+span.child {
+    padding-left: 2rem;
+}
+
+img.bar-logo {
+    margin: 5px 0;
+    height: 35px;
+}
+
+ul.login {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    float: left;
+
+    li {
+        float: left;
+        padding: 0.7rem 0px;
+        margin-right: 0.5rem;
+    }
+}
+
+div.admin-upload-form {
+    margin-bottom: 3rem;
+}
+
+div#snap-presentation {
+    
+    div.snap_column {
+        max-width: 400px;
+        
+        div#spinner-message {
+            width: 300px;
+            text-align: justify;
+            span {
+                display: block;
+                margin: 3rem 0 2rem 0;
+                text-align: center;
+            } 
+        }
+    }
+}
+
+.spinner {
+
+    -webkit-animation: rotation 2s infinite linear;
+    -moz-animation: rotation 2s infinite linear;
+    -o-animation: rotation 2s infinite linear;
+    animation: rotation 2s infinite linear;
+    transform-origin: 50% 50%;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+
+    width: 2rem;
+
+}
+
+@-webkit-keyframes rotation {
+    from {-webkit-transform: rotate(0deg);}
+    to   {-webkit-transform: rotate(359deg);}
+}
+@-moz-keyframes rotation {
+    from {-moz-transform: rotate(0deg);}
+    to   {-moz-transform: rotate(359deg);}
+}
+@-o-keyframes rotation {
+    from {-o-transform: rotate(0deg);}
+    to   {-o-transform: rotate(359deg);}
+}
+@keyframes rotation {
+    from {transform: rotate(0deg);}
+    to   {transform: rotate(359deg);}
+}
+
+
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="robots" content="noindex,nofollow"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "CoastSnap", suffix: " · Phoenix Framework" %>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  </head>
+  <body>
+    <header class="site-header">
+
+      <div class="logo-bar">
+        <a href="#" class="logo">
+          <%= img_tag("/images/logo-wide.png") %>
+        </a>
+        <div class="lang">
+          <a href="<%= change_language(@conn, "nl") %>"><%= img_tag("/images/nl.svg") %></a>
+          <a href="<%= change_language(@conn, "en") %>"><%= img_tag("/images/gb.svg") %></a>
+          <a href="<%= change_language(@conn, "ge") %>"><%= img_tag("/images/de.svg") %></a>
+        </div>
+      </div>
+
+      <div class="featured-image">
+        <%= img_tag("/images/coast.jpg") %>
+      </div>
+
+      <div class="top-bar">
+        <nav class="left">
+          <div class="title-bar" data-responsive-toggle="main-nav" data-hide-for="medium">
+            <button class="menu-icon" type="button" data-toggle="main-nav"></button>
+          </div>
+          <%= if assigns[:tree] do %>
+            <%= generate_nav(@conn, @tree) %>
+          <% end %>
+        </nav>
+        <div class="right">
+          <%= img_tag("/images/uu-bw-logo.png", class: "bar-logo") %>
+        </div>
+      </div>
+    </header>
+
+    <div class="main grid-container">
+      <div class="grid-x grid-margin-x grid-padding-y">
+        <div class="cell">
+          <%= @inner_content %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

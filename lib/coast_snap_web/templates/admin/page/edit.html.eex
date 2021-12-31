@@ -1,0 +1,4 @@
+<h2>Edit Page</h2>
+<hr />
+
+<%= render "form.html", Map.put(assigns, :action, Routes.page_path(@conn, :update, @page)) %>

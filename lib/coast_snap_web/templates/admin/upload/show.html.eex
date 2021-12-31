@@ -1,0 +1,12 @@
+<h3><%= @upload.inserted_at %></h3>
+
+<%= if String.contains?(@upload.content_type, "image") do %>
+    <img src='/uploads/<%= @upload.filename %>' style="width: 65%;" />
+<% else %>
+    <%= link @upload.filename, to: "/uploads/#{ @upload.filename }", target: "_blank" %>
+<% end %>
+
+<div class="buttons">
+    <%= link "Back", to: "/admin/uploads?page=#{@page}", class: "button" %>
+    <%= link "Destroy", to: "/admin/uploads/#{@upload.id}", class: "button alert", data: [confirm: "Are you sure?"], method: :delete %>
+</div>

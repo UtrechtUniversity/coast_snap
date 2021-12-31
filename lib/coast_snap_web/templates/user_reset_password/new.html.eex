@@ -1,0 +1,8 @@
+<h1>Forgot your password?</h1>
+
+<p>Please send an email to the admin of this website.</p>
+
+<p>
+  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+</p>

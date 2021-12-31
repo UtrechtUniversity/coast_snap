@@ -1,0 +1,20 @@
+<div class="snap-wrapper">
+    
+    <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+    <div class="snap">
+
+        <%= form_for @changeset, Routes.upload_path(@conn, :create, @country, @location), [multipart: true, id: "upload-form"], fn f -> %>
+            <%= hidden_input f, :country %>
+            <%= hidden_input f, :location %>
+
+            <%= file_input f, :upload, class: "snap", id: "upload-btn", capture: "environment", accept: "image/*" %>
+            <label class="fake-input" for="upload-btn"><span class="button large">SNAP</span></label>
+            <%= error_tag f, :upload %>
+        <% end %>
+
+    </div>
+
+    <img src="/images/logo-name.png" class="logo" />
+
+</div>

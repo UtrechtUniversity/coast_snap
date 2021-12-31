@@ -1,0 +1,42 @@
+$primary-color: #4473C5;
+$secondary-color: #FAC100;
+$black: #000;
+$white: #fff;
+
+$grid-margin-gutters: (
+  small: 20px,
+  medium: 40px,
+  large: 60px,
+);
+
+$header-color: $primary-color;
+$header-font-weight: $global-weight-bold;
+$header-styles: (
+  small: (
+    'h1': ('font-size': 24),
+    'h2': ('font-size': 20),
+    'h3': ('font-size': 19),
+    'h4': ('font-size': 18),
+    'h5': ('font-size': 17),
+    'h6': ('font-size': 16),
+  ),
+  medium: (
+    'h1': ('font-size': 28),
+    'h2': ('font-size': 24),
+    'h3': ('font-size': 20),
+    'h4': ('font-size': 18),
+    'h5': ('font-size': 16),
+    'h6': ('font-size': 14),
+  ),
+);
+
+$dropdownmenu-arrow-color: $white;
+$dropdownmenu-border: 0;
+$dropdown-menu-item-color-active: $white;
+$dropdownmenu-padding: 1rem 1rem;
+
+$accordionmenu-arrow-color: $white;
+
+$topbar-padding: 0;
+$topbar-background: $black;
+$topbar-submenu-background: $black;

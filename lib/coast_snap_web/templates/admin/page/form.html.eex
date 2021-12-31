@@ -1,0 +1,38 @@
+<%= form_for @changeset, @action, [class: "page-form"], fn f -> %>
+
+    <fieldset class="page">
+        <%= label f, "Position", class: "" %>
+        <%= select f, :position, 1..20, prompt: "select position" %>
+
+        <%= label f, "Parent", class: "" %>
+        <%= select f, :parent_id, options_for_parent(@parents, f.data), prompt: "select a parent" %>
+
+        <%= label f, "Slug", class: "" %>
+        <%= text_input f, :slug, class: "", value: f.data.slug %>
+        <%= error_tag f, :slug %>
+    </fieldset>
+
+
+
+    <%= for lang <- ["nl", "en", "ge"] do %>
+        <%
+            nav = String.to_atom("nav_#{lang}")
+            text = String.to_atom("content_#{lang}")
+        %>
+
+        <fieldset class="page">
+            <%= label f, "Navigation #{lang}", class: "" %>
+            <%= text_input f, nav, class: "" %>
+            <%= error_tag f, nav %>
+
+            <%= label f, text, class: "" %>
+            <%= textarea f, text, class: "" %>
+        </fieldset>
+
+    <% end  %>
+
+    <fieldset>
+        <%= submit "Submit", class: "button" %>
+    </fieldset>
+
+<% end %>

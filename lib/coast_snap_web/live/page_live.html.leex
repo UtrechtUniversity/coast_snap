@@ -1,0 +1,31 @@
+<h1>Dankjewel!</h1>
+
+<p>Dankjewel voor het nemen van een CoastSnap!</p>
+
+<p>De beelden die we met jouw bijdrage verzamelen...</p>
+
+<p><i class='fa fa-spin'></i></p>
+
+<%= unless is_nil(@snap) do %>
+    <div id="snap-presentation" class="grid-x">
+        <div class="cell large-6">
+            <div class="snap_column">
+                <h5>Origineel</h5>
+                <img src="/snaps/<%= @snap.filename %>"/>
+            </div>
+        </div>
+        <div class="cell large-6">
+            <div class="snap_column">
+                <h5>Verwerkte foto</h5>
+                <%= unless @snap.is_processed do %>
+                    <div id="spinner-message">
+                        <span><%= img_tag("/images/spinner-solid.svg", class: "spinner") %></span>
+                        <p>Een moment alstublieft. Het verwerken van uw foto kost ongeveer 20 sec, maar kan
+                        langer duren als het druk is op de website.</p>
+                    </div>
+                <% else  %>
+                    <img src="/snaps/processed_<%= @snap.filename %>"/>
+                <% end %>
+        </div>
+    </div>
+<% end  %>

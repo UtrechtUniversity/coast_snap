@@ -1,0 +1,9 @@
+<h3><%= String.upcase(@snap.country || "") %>/<%= String.capitalize(@snap.location) %>, <%= @snap.inserted_at %></h3>
+
+<img src='/snaps/<%= @snap.filename %>' style="width: 65%;" />
+
+<div class="buttons">
+    <%= link "Back", to: "/admin/snap_shots?page=#{@page}", class: "button" %>
+    <%= link "Download", to: "/admin/snap_shots/download/#{ @snap.id }", class: "button" %>
+    <%= link "Destroy", to: "/admin/snap_shots/#{@snap.id}", class: "button alert", data: [confirm: "Are you sure?"], method: :delete %>
+</div>

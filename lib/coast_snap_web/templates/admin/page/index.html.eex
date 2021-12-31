@@ -1,0 +1,46 @@
+
+
+<table>
+    <thead>
+        <tr>
+            <th>nav</th>
+            <th>inserted at</th>
+            <th>position</th>
+            <th>action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for page <- @pages do %>
+        <tr>
+            <td>
+                <%
+                    klass = case is_nil(page.parent_id) do
+                        true -> "parent"
+                        false -> "child"
+                    end
+                %>
+                <span class="<%= klass %>"><%= page.nav_nl %></span>
+            </td>
+            <td><%= page.inserted_at %></td>
+            <td><%= page.position %></td>
+            <td>
+                <%= link "show", to: "/admin/pages/#{ page.id }" %> |
+                <%= link "edit", to: "/admin/pages/#{ page.id }/edit" %> |
+                <%= if MapSet.member?(@parents_with_children, page.id) do %>
+                    <span class="no-delete">destroy</span>
+                <% else  %>
+                    <%= link "destroy", to: "/admin/pages/#{ page.id }", method: :delete, data: [confirm: "Are you sure?"] %>
+                <% end  %>
+                <%= if is_nil(page.parent_id) do %>
+                    | <%= link "add subpage", to: "/admin/pages/new?parent_id=#{ page.id }" %>
+                <% end %>
+            </td>
+        </tr>
+        <% end %>
+    </tbody>
+
+</table>
+
+<div class="admin-button-row">
+    <%= link "Create Page", to: "/admin/pages/new", class: "button" %>
+</div>
