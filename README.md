@@ -3,19 +3,19 @@
 A Phoenix Web application that enables beach visitors to upload coastline pictures.
 
 ## Table of Contents
-* [General info](#general_info)
+* [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
     * [Deployment](#deployment)
-    * [Create first admin](#create_first_admin)
-* [Content Management System](#content_management_system)
-    * [Access and Authentication](#access_and_authentication)
-    * [Coastline Pictures](#coastline_pictures)
+    * [Create first admin](#create-first-admin)
+* [Content Management System](#content-management-system)
+    * [Access and Authentication](#access-and-authentication)
+    * [Coastline Pictures](#coastline-pictures)
     * [Articles](#acticles)
     * [Uploads](#uploads)
-    * [Users](#user_accounts)
-* [Frontend behavior](#frontend_behavior) 
-* [Processing the coastsnaps](#processing_the_coastsnaps)
+    * [Users](#user-accounts)
+* [Frontend behavior](#frontend-behavior) 
+* [Processing the coastsnaps](#processing-the-coastsnaps)
 
 ## General Info
 
@@ -28,7 +28,7 @@ CoastSnap is a global citizen science project to capture changing coastlines. Wi
 * Node version: 14.18.2
 * Zurb Foundation version: 6.7.3
 * NginX version: 1.20.2
-* Python version: <= 3.7.1
+* Python version: >= 3.7.1
     * [Falcon](https://falcon.readthedocs.io/en/stable/) version: 3.0.1
     * [Gunicorn](https://gunicorn.org/) version: 20.1.0
 
