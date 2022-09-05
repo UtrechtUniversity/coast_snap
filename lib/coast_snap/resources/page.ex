@@ -7,6 +7,7 @@ defmodule CoastSnap.Resources.Page do
         field :position, :integer, default: 1
         field :parent_id, :integer, default: nil
         field :slug, :string, unique: true
+        field :status, :string, default: "hidden"
 
         field :nav_en, :string
         field :content_en, :string
@@ -28,9 +29,9 @@ defmodule CoastSnap.Resources.Page do
             |> String.replace(~r/\s+/, "_")
         params = Map.put(params, "slug", processed_slug)
         page
-        |> cast(params, [:position, :parent_id, :slug, :nav_en, :content_en,
+        |> cast(params, [:position, :parent_id, :slug, :status, :nav_en, :content_en,
             :nav_nl, :content_nl, :nav_ge, :content_ge])
-        |> validate_required([:position, :slug, :nav_en, :nav_nl, :nav_ge])
+        |> validate_required([:position, :slug, :status, :nav_en, :nav_nl, :nav_ge])
         |> unique_constraint(:slug)
     end
 

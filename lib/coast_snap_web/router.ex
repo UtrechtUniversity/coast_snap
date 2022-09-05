@@ -73,6 +73,7 @@ defmodule CoastSnapWeb.Router do
     get "/users/:id/forgot_password", UserController, :forgot_password
     resources "/pages", PageController
     resources "/uploads", UploadController, only: [:index, :create, :show, :delete]
+    live "/yoda", YodaLive, :index
   end
 
   scope "/", CoastSnapWeb do
@@ -84,10 +85,11 @@ defmodule CoastSnapWeb.Router do
 
   scope "/", CoastSnapWeb do
     pipe_through :browser
-    get "/", VisitorController, :index
-    get "/:country/", VisitorController, :index
-    live "/:country/thankyou", PageLive, :index
+
+    live "/:country/thankyou/:id", PageLive, :index
     get "/:country/:slug", VisitorController, :show
+    get "/:country/", VisitorController, :index
+    get "/", VisitorController, :index
   end
 
 

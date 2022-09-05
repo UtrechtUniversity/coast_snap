@@ -6,7 +6,7 @@ defmodule CoastSnapWeb.LayoutView do
     current_slug = Map.get(conn.params, "slug", false)
 
     ~E"""
-    <ul id="main-nav" class="vertical medium-horizontal menu" data-responsive-menu="accordion medium-dropdown" data-animate="slide-in-down slide-out-up">
+    <ul id="main-nav" class="vertical medium-horizontal menu">
     <%= for [parent, children] <- tree do %>
         <%= if Enum.empty?(children) do %>
             <li class="<%= nav_class(parent.slug, current_slug) %>"><%= menu_link(parent, country) %></li>

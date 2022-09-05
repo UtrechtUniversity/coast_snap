@@ -26,6 +26,7 @@
             <li><a href="/admin/pages">Articles</a></li>
             <li><a href="/admin/uploads">Uploads</a></li>
             <li><a href="/admin/users">Users</a></li>
+            <li><a href="/admin/yoda">Yoda</a></li>
           </ul>
         </nav>
         <div class="right">

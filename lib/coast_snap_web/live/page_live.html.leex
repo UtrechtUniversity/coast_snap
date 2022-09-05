@@ -1,31 +1,60 @@
-<h1>Dankjewel!</h1>
+<h2>Dankjewel voor het delen van een CoastSnap!</h2>
 
-<p>Dankjewel voor het nemen van een CoastSnap!</p>
+<%
+    location = String.replace_suffix(@snap.location, "noord", "")
+    location = String.replace_suffix(location, "zuid", "")
+%>
 
-<p>De beelden die we met jouw bijdrage verzamelen...</p>
-
-<p><i class='fa fa-spin'></i></p>
+<p>Wil je meer weten over de kustprocessen die we met jouw beelden onderzoeken bij <%= @snap.location %>
+<a href="https://coastsnap.nl/nl/<%= location %>">klik dan hier</a></p>
 
 <%= unless is_nil(@snap) do %>
     <div id="snap-presentation" class="grid-x">
         <div class="cell large-6">
             <div class="snap_column">
                 <h5>Origineel</h5>
-                <img src="/snaps/<%= @snap.filename %>"/>
+                <img src="/snaps/<%= @snap.org_filename %>"/>
             </div>
         </div>
         <div class="cell large-6">
             <div class="snap_column">
                 <h5>Verwerkte foto</h5>
                 <%= unless @snap.is_processed do %>
-                    <div id="spinner-message">
-                        <span><%= img_tag("/images/spinner-solid.svg", class: "spinner") %></span>
-                        <p>Een moment alstublieft. Het verwerken van uw foto kost ongeveer 20 sec, maar kan
-                        langer duren als het druk is op de website.</p>
-                    </div>
+                    <%= cond do %>
+                        <% @snap.proc_filename == Application.get_env(:coast_snap, :failure_message) -> %>
+                            <p>
+                                Er is helaas wat mis gegaan bij het verwerken van uw foto.
+                            </p>
+                        <% @snap.proc_filename == Application.get_env(:coast_snap, :location_failure) -> %>
+                            <p>
+                                Voor deze locatie zijn we druk met het verzamelen van beelden om ons
+                                slimme algoritme mee te trainen. Zodra wij voldoende beelden hebben ontvangen,
+                                kunnen we direct inzichtelijk maken waar de waterlijn zich bevindt in jouw CoastSnap.
+                            </p>
+                        <% true ->  %>
+                            <div id="spinner-message">
+                                <span><%= img_tag("/images/spinner-solid.svg", class: "spinner") %></span>
+                                <p>
+                                    Een moment alstublieft. Het verwerken van uw foto kost ongeveer
+                                    45 sec, maar kan langer duren als het druk is op de website.
+                                </p>
+                            </div>
+                    <% end %>
+
                 <% else  %>
-                    <img src="/snaps/processed_<%= @snap.filename %>"/>
+                    <img src="/snaps/<%= @snap.proc_filename %>"/>
                 <% end %>
         </div>
     </div>
 <% end  %>
+
+<p><strong>Wil je op de hoogte blijven? Volg ons op Twitter of Facebook:</strong></p>
+
+<p>
+<a href="https://twitter.com/coastsnapnl?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @coastsnapnl</a>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</p>
+
+<p>
+<iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FCoastSnapNL%2F&width=500&layout=standard&action=like&size=small&share=true&height=35&appId" width="500" height="35" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+</p>

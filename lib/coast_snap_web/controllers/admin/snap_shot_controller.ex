@@ -16,10 +16,18 @@ defmodule CoastSnapWeb.Admin.SnapShotController do
         render(conn, :show, %{ snap: snap, page: page })
     end
 
-    def download(conn, %{ "id" => id }) do
+    def download(conn, params) do
+        %{ "id" => id } = params
+        version = Map.get(params, "version", "org")
+        # get snap
         snap = SnapShots.get_snap_shot(id)
-        local_path = SnapShots.local_path(snap.filename)
-        send_download conn, { :file, local_path }, filename: snap.filename
+        # get filename
+        filename = case version == "org" do
+            true -> snap.org_filename
+            false -> snap.proc_filename
+        end
+        local_path = SnapShots.local_path(filename)
+        send_download conn, { :file, local_path }, filename: filename
     end
 
     def delete(conn, %{ "id" => id }) do

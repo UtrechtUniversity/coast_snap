@@ -29,7 +29,7 @@ defmodule CoastSnapWeb.UploadController do
                 # send snap to Gneerver to be processed later
                 CoastSnap.GenServers.SnapProcessingQueue.process_snap(snap)
                 # redirect to LiveView
-                redirect(conn, to: "/#{country}/thankyou?id=#{snap.id}")
+                redirect(conn, to: "/#{country}/thankyou/#{snap.id}")
             { :error, reason } ->
                 Logger.error(inspect(reason))
                 put_flash(conn, :error, "Could not upload image")

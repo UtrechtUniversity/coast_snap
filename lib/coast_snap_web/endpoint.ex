@@ -30,7 +30,7 @@ defmodule CoastSnapWeb.Endpoint do
     at: "/uploads",
     from: Application.get_env(:coast_snap, :uploads_dir)
 
-plug Plug.Static,
+  plug Plug.Static,
     at: "/snaps",
     from: Application.get_env(:coast_snap, :snaps_dir)
 

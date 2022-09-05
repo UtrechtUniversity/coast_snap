@@ -1,0 +1,60 @@
+<h1>Transfer snaps to Yoda</h1>
+
+<p>This is a complex feature. Use it with patience. First select the files that needs to be transferred. It is better to transfer smaller batches
+    (e.g. all files from a certain week). Fill out your UU email address and Solis account password, and select a timeframe. Click the "Select button".
+    This action will gather all relevant files and configurate the Yoda client. If the file selections isn't too big click on the "Transfer" button
+    to start the actual transfer. The Yoda server might be slow from time to time. <strong>Do not click the Transfer button repeatedly</strong>.
+    That might trigger several identical transfers and will unnecessarily tax the Yoda server. Transferring a file might take more than 10 seconds
+    if the target folder on Yoda doesn't exist. <strong>Be patient!</strong> For every transfer a status must appear in the transfer table once the
+    file is processed.
+</p>
+
+<%= if is_list(@keys) and Enum.empty?(@keys) do %>
+
+    <h2>Select Files</h2>
+
+    <%= f = form_for @changeset, "#", phx_submit: "save" %>
+
+        <fieldset class="page">
+
+            <%= label f, "Email", class: "" %>
+            <%= text_input f, :email, class: "" %>
+
+            <%= label f, "Password", class: "" %>
+            <%= password_input f, :password, class: "" %>
+
+            <%= label f, "Start Date", class: "" %>
+            <%= date_input f, :start_date, class: "" %>
+
+            <%= label f, "End Date", class: "" %>
+            <%= date_input f, :end_date, class: "" %>
+
+            <%= submit "Select", class: "button" %>
+        </fieldset>
+
+    </form>
+
+<% end %>
+
+<h2>Transfer</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>File / Folder</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+<%= for target_path <- @keys do %>
+        <tr id="<%= target_path %>">
+            <td><%= target_path %></td>
+            <td><%= Map.get(@transfers, target_path) |> Map.get(:status) %></td>
+        </tr>
+<% end  %>
+    </tbody>
+</table>
+<%= if is_list(@keys) and not(Enum.empty?(@keys)) do %>
+    <button phx-click="transfer" class="button" data-confirm="Are you sure? Note that file transfers might take more than 10 seconds!">Transfer</button>
+    <button phx-click="reset" class="button">Reset</button>
+<% end  %>

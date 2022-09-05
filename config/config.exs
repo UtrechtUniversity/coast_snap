@@ -8,7 +8,10 @@
 use Mix.Config
 
 config :coast_snap,
-  ecto_repos: [CoastSnap.Repo]
+  ecto_repos: [CoastSnap.Repo],
+  failure_message: "processing_failed",
+  location_failure: "non_existent_location",
+  processing_timeout: 2 * 60
 
 # Configures the endpoint
 config :coast_snap, CoastSnapWeb.Endpoint,

@@ -10,6 +10,10 @@
         <%= label f, "Slug", class: "" %>
         <%= text_input f, :slug, class: "", value: f.data.slug %>
         <%= error_tag f, :slug %>
+
+        <%= label f, "Status", class: "" %>
+        <%= select f, :status, ["hidden", "published"] %>
+        <%= error_tag f, :status %>
     </fieldset>
 
 

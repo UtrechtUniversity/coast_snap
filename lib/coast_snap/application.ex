@@ -21,7 +21,8 @@ defmodule CoastSnap.Application do
       CoastSnapWeb.Endpoint,
       # Start a worker by calling: CoastSnap.Worker.start_link(arg)
       # {CoastSnap.Worker, arg}
-      CoastSnap.GenServers.SnapProcessingQueue
+      CoastSnap.GenServers.SnapProcessingQueue,
+      CoastSnap.GenServers.YodaTransfer
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

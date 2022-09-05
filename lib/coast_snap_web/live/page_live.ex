@@ -14,13 +14,25 @@ defmodule CoastSnapWeb.PageLive do
         false ->
             :ok
     end
-    { :ok, assign(socket, :snap, snap) }
+
+    socket = assign(
+        socket,
+        snap: snap
+    )
+
+    { :ok, socket }
     end
 
     @impl true
-    def handle_info({ :processing_done, snap }, socket) do
-        { :noreply, assign(socket, :snap, snap) }
-    end
+    def handle_info({ :processing_done, new_snap }, socket) do
+        # if incoming snap is correct (this is a bit much but I don't want people
+        # to see the wrong snaps)
+        socket = case new_snap.id == socket.assigns.snap.id do
+            true -> assign(socket, snap: new_snap)
+            false -> socket
+        end
 
+        { :noreply, socket }
+    end
 
 end

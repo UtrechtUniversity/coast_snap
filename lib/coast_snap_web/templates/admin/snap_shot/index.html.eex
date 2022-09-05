@@ -13,13 +13,15 @@
         <%= for record <- @snaps.list do %>
         <tr>
             <td><%= record.id %></td>
-            <td><%= record.filename |> truncate(50) # truncate can be found in helpers %></td>
+            <td><%= record.org_filename |> truncate(50) # truncate can be found in helpers %></td>
             <td><%= record.inserted_at %></td>
             <td><%= record.country %></td>
             <td><%= record.location %></td>
             <td>
                 <%= link "show", to: "/admin/snap_shots/#{ record.id }?page=#{@page}" %> |
-                <%= link "download", to: "/admin/snap_shots/download/#{ record.id }" %>
+                download
+                <%= link "org", to: "/admin/snap_shots/download/#{ record.id }?version=org" %> -
+                <%= link "proc", to: "/admin/snap_shots/download/#{ record.id }?version=proc" %>
             </td>
         </tr>
         <% end %>

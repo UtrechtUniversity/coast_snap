@@ -25,7 +25,8 @@ import Foundation from "foundation-sites";
 $(document).foundation();
 $(function() {
     console.log('ready');
-    $('.title-bar').on('toggled.zf.responsiveToggle', function() {
+    $('.title-bar button').on('click', function() {
+        $('#main-nav').toggleClass('open');
         $(this).toggleClass('open');
     });
 });

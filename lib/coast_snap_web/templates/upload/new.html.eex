@@ -1,5 +1,5 @@
 <div class="snap-wrapper">
-    
+
     <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
     <div class="snap">
@@ -8,9 +8,26 @@
             <%= hidden_input f, :country %>
             <%= hidden_input f, :location %>
 
+            <%= checkbox f, :accepts_terms_of_agreement %>
+            <label for="upload-form_accepts_terms_of_agreement">
+                <%= if @country == "nl" do %>
+                    Ja, ik ga <a href="https://coastsnap.nl/nl/privacy" target="_blank" class="underline">
+                        akkoord met de voorwaarden.</a>
+                <% end %>
+                <%= if @country == "en" do %>
+                    Yes, I agree to the <a href="https://coastsnap.nl/en/privacy" target="_blank" class="underline">
+                        terms and conditions.</a>
+                <% end %>
+                <%= if @country == "ge" do %>
+                    Ja, ich stimme <a href="https://coastsnap.nl/ge/privacy" target="_blank" class="underline">
+                        den AGB zu.</a>
+                <% end %>
+            </label>
+
             <%= file_input f, :upload, class: "snap", id: "upload-btn", capture: "environment", accept: "image/*" %>
             <label class="fake-input" for="upload-btn"><span class="button large">SNAP</span></label>
             <%= error_tag f, :upload %>
+
         <% end %>
 
     </div>

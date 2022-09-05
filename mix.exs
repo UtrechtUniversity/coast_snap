@@ -49,7 +49,8 @@ defmodule CoastSnap.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phx_gen_auth, "~> 0.6", only: [:dev], runtime: false},
-      {:httpoison, "~> 1.8"}
+      {:httpoison, "~> 1.8"},
+      {:webdavex, "~> 0.3.3"},
     ]
   end
 

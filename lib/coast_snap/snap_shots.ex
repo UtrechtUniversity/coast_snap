@@ -26,11 +26,16 @@ defmodule CoastSnap.SnapShots do
             local_time
             |> DateTime.to_unix(:millisecond)
 
-        "#{unix_timestamp}_#{location}_#{filename}"
+        date = Calendar.strftime(local_time, "%A.%B.%d_%H.%M.%S_%Y")
+        extension = Path.extname(filename)
+        # 1646404053.Friday.March.04_15.27.33_2022.egmond.snap.jpg
+        "#{unix_timestamp}.#{date}.#{location}.snap#{extension}"
     end
 
     def create_original(params \\ %{}) do
-        %{ "location" => location, "upload" => upload, "country" => country } = params
+        %{ "location" => location, "upload" => upload,
+            "country" => country, "accepts_terms_of_agreement" => toa } = params
+
         %Plug.Upload{
             filename: filename,
             path: tmp_path,
@@ -42,12 +47,12 @@ defmodule CoastSnap.SnapShots do
         filename = generate_filename(filename, location)
 
         params = %{
-            filename: filename,
+            org_filename: filename,
             content_type: content_type,
             hash: hash,
             location: location,
             country: country,
-            is_original: true
+            accepts_terms_of_agreement: toa
         }
 
         Repo.transaction fn ->
@@ -62,24 +67,10 @@ defmodule CoastSnap.SnapShots do
         end
     end
 
-    def create_processed(original, new_filepath) do
-        # get size of new file
-        {:ok, stat} = File.stat(new_filepath)
-        %File.Stat{size: size} = stat
-        # get hash
-        hash = get_hash(new_filepath)
-        # get params
-        params = %{
-            filename: Path.basename(new_filepath),
-            content_type: original.content_type,
-            hash: hash,
-            size: size,
-            location: original.location,
-            country: original.country,
-            is_original: false,
-            original_id: original.id
-        }
-        create_snap(params)
+    def update_snap(snap, params) do
+        snap
+        |> SnapShot.processed_changeset(params)
+        |> Repo.update()
     end
 
     def create_snap(params \\ %{}) do
@@ -88,18 +79,14 @@ defmodule CoastSnap.SnapShots do
         |> Repo.insert()
     end
 
-    def snap_is_processed(snap) do
-        snap
-        |> SnapShot.processed_changeset(%{ is_processed: true })
-        |> Repo.update()
-    end
-
     def destroy(id) do
         snap = Repo.get!(SnapShot, id)
-        file_path = local_path(snap.filename)
+        org_filepath = local_path(snap.org_filename)
+        proc_filepath = local_path(snap.proc_filename)
         Repo.transaction fn ->
             with { :ok, _ } <- Repo.delete(snap),
-                :ok <- File.rm(file_path)
+                :ok <- File.rm(org_filepath),
+                :ok <- File.rm(proc_filepath)
             do
                 :ok
             else

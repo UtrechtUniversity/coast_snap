@@ -47,6 +47,7 @@ header.site-header {
 
   .top-bar {
     padding: 0;
+    align-items: stretch;
     @include breakpoint(medium) {
       padding: 0 1rem;
     }
@@ -59,29 +60,32 @@ header.site-header {
     }
     .right {
       padding-right: 1rem;
+      position: relative;
+      z-index: 4;
+      background: $black;
     }
     .title-bar {
       position: relative;
       z-index: 3;
       padding: 1rem 0.5rem;
-      &:after {
-        display: block;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 6px;
-        border-bottom-width: 6px;
-        content: '';
-        border-bottom-width: 0;
-        border-color: $white transparent transparent;
-        right: 5px;
-        left: auto;
-        margin-top: 2px;
-        margin-left: 0.25rem;
-      }
-      &.open {
-        &:after {
-          transform: rotate(180deg);
+      button {
+        position: relative;
+        &::before {
+          display: block;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 6px;
+          border-bottom-width: 6px;
+          content: '';
+          border-bottom-width: 0;
+          border-color: $white transparent transparent;
+          margin-left: 1.7rem;
+        }
+        &.open {
+          &::before {
+            transform: rotate(180deg);
+          }
         }
       }
     }
@@ -95,7 +99,7 @@ header.site-header {
         &.active,
         &:hover {
           & > a {
-            background: lighten($black, 10%) !important;
+            background: lighten($black, 15%) !important;
           }
         }
       }
@@ -105,8 +109,15 @@ header.site-header {
         left: 0;
         padding: 0.5rem 0;
         width: 15rem;
-        li {
-          a {
+        transform: translate3d(0, -100%, 0);
+        transition: transform 0.3s ease;
+
+        &.open {
+          transform: translate3d(0, 0, 0);
+        }
+
+        & > li {
+          & > a {
             &:before {
               content: '-';
               margin-right: 1rem;
@@ -115,7 +126,54 @@ header.site-header {
           }
         }
         .submenu {
-          background: lighten($black, 15%);
+          background: lighten($black, 20%);
+
+          a {
+            padding-left: 2.5rem;
+          }
+        }
+      }
+
+      @include breakpoint(medium) {
+        height: 100%;
+        & > li {
+          position: relative;
+          & > a {
+            position: relative;
+            z-index: 2;
+            background: $black;
+            height: 100%;
+            display: flex;
+            align-items: center;
+          }
+        }
+        .submenu {
+          position: absolute;
+          transform: translate3d(0, -100%, 0);
+          transition: transform 0.3s ease;
+          width: 13rem;
+        }
+        .has-submenu {
+          & > a {
+            &::after {
+              display: block;
+              width: 0;
+              height: 0;
+              content: "";
+              border-color: #fff transparent transparent;
+              border-style: solid;
+              border-width: 6px 6px 0;
+              right: 5px;
+              left: auto;
+              margin-top: 2px;
+              margin-left: .25rem;
+            }
+          }
+          &:hover {
+            .submenu {
+              transform: translate3d(0, 0, 0);
+            }
+          }
         }
       }
     }

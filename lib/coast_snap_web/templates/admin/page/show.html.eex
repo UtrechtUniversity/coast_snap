@@ -2,6 +2,10 @@
 <hr />
 
 <div class="show-content">
+    status: <strong><%= @page.status %></strong>
+</div>
+
+<div class="show-content">
     <h3><%= @page.nav_nl %></h3>
     <%= raw(@page.content_nl) %>
 </div>

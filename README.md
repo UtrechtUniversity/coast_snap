@@ -19,7 +19,8 @@ A Phoenix Web application that enables beach visitors to upload coastline pictur
 
 ## General Info
 
-CoastSnap is a global citizen science project to capture changing coastlines. With our web application we enable beach visitors to quickly upload photos from the coastline. Besides the upload feature, the app also provides a simple website for additional information about the project.
+CoastSnap is a global citizen science project to capture changing coastlines. With our web application
+we enable beach visitors to quickly upload photos from the coastline. Besides the upload feature, the app also provides a simple website for additional information about the project.
 
 ## Technologies
 * Phoenix Framework version: 1.5.10
@@ -28,7 +29,7 @@ CoastSnap is a global citizen science project to capture changing coastlines. Wi
 * Node version: 14.18.2
 * Zurb Foundation version: 6.7.3
 * NginX version: 1.20.2
-* Python version: >= 3.7.1
+* Python version: <= 3.7.1
     * [Falcon](https://falcon.readthedocs.io/en/stable/) version: 3.0.1
     * [Gunicorn](https://gunicorn.org/) version: 20.1.0
 
@@ -101,6 +102,8 @@ Use the following script on the server to deploy the website:
 
 # stop the Falcon server
 sudo systemctl stop falcon_snap
+# stop gunicorn
+sudo pkill gunicorn
 
 # folder used to store uploaded web contents
 upload_folder="/home/kaand006/uploads"
@@ -137,17 +140,44 @@ sudo UPLOADS_DIR=$upload_folder SNAPS_DIR=$snaps_folder MIX_ENV=prod mix release
 sudo /home/kaand006/apps/coast_snap/_build/prod/rel/coast_snap/bin/coast_snap stop
 # and start the current one
 sudo /home/kaand006/apps/coast_snap/_build/prod/rel/coast_snap/bin/coast_snap daemon
-```
-Note that stopping and starting the Falcon service requires sudo permissions, the script will prompt for your credentials. Also note the required environment variables `UPLOADS_DIR` and `SNAPS_DIR`! They need to refer to the paths of the upload folders we have created in the previous steps.
 
-After execution, check whether the Falcon server is running and if the application has started:
+# now we start pulling in the Python app
+home="/home/kaand006/apps"
+python_dir="$home/coast_snap/priv/python"
+models_home="$home/coastsnap_assets"
+
+mkdir -p $python_dir
+cd $python_dir
+# pull CoastSnapPy.git if needed
+if [ ! -z $1 ] && [[ "$1" == "pull_coastsnappy" ]]
+then
+      echo "pull"
+      git clone git@github.com:mathvansoest/CoastSnapPy.git
+else
+      echo "dont pull"
+fi
+# copy models
+mkdir -p "$python_dir/CoastSnapPy/Objects/egmond/strandtent/models"
+cp "$models_home/egmond/strandtent/"* "$python_dir/CoastSnapPy/Objects/egmond/strandtent/models"
+mkdir -p "$python_dir/CoastSnapPy/Objects/egmond/zilvermeeuw/models"
+cp "$models_home/egmond/zilvermeeuw/"* "$python_dir/CoastSnapPy/Objects/egmond/zilvermeeuw/models"
+
+# copy rest server to appropriate location
+cp "$models_home/falcon/rest_server.py" "$python_dir/CoastSnapPy/CoastSnapPy"
+cd "$python_dir/CoastSnapPy/CoastSnapPy"
+sudo -b nohup /home/kaand006/anaconda3/envs/coastsnappy/bin/gunicorn rest_server:app --env OUTPUT_PATH=/home/kaand006 </dev/null >/dev/null 2>&1
+```
+
+Note that stopping and starting the Falcon service requires sudo permissions, the script will prompt for your credentials. Also note that the deployment script takes an extra argument `pull_coastsnappy` if you want to pull the entire CoastSnapPy repo into the Elixir application. This assumes an empty `/priv/python/` folder. Small changes in the CoastSnapPy application can be imported with a simple manual pull request on the server (within `/priv/python/CoastSnapPy`). It can happen that a more complex upgrade of CoastSnapPy won't run after a pull request. To save time, remove CoastSnapPy entirely and run the shell script with the `pull_coastsnappy` argument (e.g. `$ ./deploy_coastsnap.sh pull_coastsnappy`) to redeploy both applications.
+
+After running check whether the Falcon server is running and if the application has started with the commands:
 ```
 $ ps ax | grep gunicorn
-$ ps ax | grep coast_snap
+$ ps ax | grep coast_line
 ```
-Besides the Phoenix daemon process, another `coast_snap` Elixir process should be running, alongside a number of database processes. **If this is not the case run the deploy script again**.
+Besides the Phoenix daemon process, another Elixir process should be running, alongside a number of database processes. If this is not the case run the deploy script again.
 
-#### Running locally 
+#### Deploying locally 
 
 Make sure you set the environment variable `UPLOADS_DIR` and `SNAPS_DIR` before you start the local server or start the app like this:
 ```
@@ -194,8 +224,9 @@ The form contains a number of fields:
 1. Position: this integer is used to generate the navigational structure. Lower numbers will appear sooner in the menu.
 2. Parent: applies to subpages. This dropdown will let you select the parent page. The options are the NL navigation titles.
 3. Slug: the website uses slugs instead of id numbers. Provide a string. The system will downcase it and replace spaces with underscores.
-4. For the Dutch, English and German language a navigation and content field are available. **All navigation fields are mandatory**. The string in the navigation fields are used in the navigation menu of the front end. The content fields are very simple: add your HTML in here and it will be rendered as is. There is **no** HTML editor.
-5. Published: pages that aren't published are not visible on the front end.
+4. Status: 'hidden' articles are hidden from the public. Set to 'published' once the article is ready.
+5. For the Dutch, English and German language a navigation and content field are available. **All navigation fields are mandatory**. The string in the navigation fields are used in the navigation menu of the front end. The content fields are very simple: add your HTML in here and it will be rendered as is. There is **no** HTML editor.
+6. Published: pages that aren't published are not visible on the front end.
 
 #### Updating, deleting and adding subpages
 
@@ -209,15 +240,11 @@ Uploads are not be confused with the uploaded coastal snaps! This resource is ma
 
 ### Users
 
-The CMS is accessible to anyone who has a confirmed user account (admins). Under `Users` we can find a list of all registered users accounts. Some of them might not be confirmed. If a new user registers, he/she needs to wait until an existing admin confirms the new account. Confirming is done by clicking the `confirm` link on the right hand side of the appropriate user account.
-
-Registered users have to contact an admin if they forget their password. The current setup does not provide an email server. The admin has to click on the `forgot password` link of the appropriate user account. This will reveal a ready made email text that needs to be copy-pasted into a real email client and send to the person in question.
-
-A user account can be deleted by clicking the `destroy` link.
+The CMS 
 
 ### Processing the coastsnaps
 
-The uploaded coastsnaps are processed with a Python script. If a person uploads a picture to the system, the processed image must be shared with him/her. But processing time may exceed the normal timeout of a web request. Furthermore we want to avoid that the image processing has an influence on the performance of the webserver. Therefore we have split up the web application from the image processing. This is done by running a second dedicated Python server (Falcon). Its sole job is to receive image-processing requests from the Phoenix application and spin up a Thread for every new image in which it can be processed.
+The uploaded coastsnaps are processed with a Python script. If a person uploads a picture to the system, the processed image must be shared with him/her. But processing time may exceed the normal timeout of a webrequest. Furthermore we want to avoid that the image processing has an influence on the performance of the webserver. Therefore we have split up the web application from the image processing. This is done by running a second dedicated Python server (Falcon). Its sole job is to receive image-processing requests from the Phoenix application and spin up a Thread for every new image in which it can be processed.
 
 At the moment a queue in the Phoenix app delegates the Falcon server. This has pros and cons. The queue guarantees sequential processing and will avoid peek loads on the server. But it waits for every processing job to finish. If multiple images are uploaded in a short period of time, visitors will have to wait longer before they can see the result. After uploading every visitor is redirected to a LiveView page which has id information about the taken coastsnap. It shows the uploaded picture by default and waits (indefinitely) for the processing result. With this background information we can summarize the processing route of an uploaded image:
 
@@ -225,4 +252,4 @@ At the moment a queue in the Phoenix app delegates the Falcon server. This has p
 2. If there is no other image being processed at the moment, a POST request will be send to the Python Falcon server containing the filepath, country, location and id number of the `SnapShot` record.
 3. Falcon will spin up a Threat which is going to deal with processing the uploaded image.
 4. Once processed, the processed image is stored on the filesystem. The Phoenix app is notified with a PUT request to the Phoenix controller `PythonController (/lib/coast_snap_web/controllers/python_controller.ex))`. This request also contains the id number of the `SnapShot`.
-5. The controller updates the `SnapShot` record of the original image with the information that a processed counterpart has been made, it then adds the processed image to the database as a new `SnapShot` record, notifies the GenServer's queue to start processing the next image, and broadcasts to the LiveView `PageLive (/lib/coast_snap_web/live/page_live.ex)` that the processed counterpart can be shown.
+5. The controller updates the `SnapShot` record of the original image with the information that a processed counterpart has been made and adds the processed image filename, notifies the GenServer's queue to start processing the next image, and broadcasts to the LiveView `PageLive (/lib/coast_snap_web/live/page_live.ex)` that the processed counterpart can be shown.

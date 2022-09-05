@@ -44,4 +44,5 @@
   "timex": {:hex, :timex, "3.7.6", "502d2347ec550e77fdf419bc12d15bdccd31266bb7d925b30bf478268098282f", [:mix], [{:combine, "~> 0.10", [hex: :combine, repo: "hexpm", optional: false]}, {:gettext, "~> 0.10", [hex: :gettext, repo: "hexpm", optional: false]}, {:tzdata, "~> 1.0", [hex: :tzdata, repo: "hexpm", optional: false]}], "hexpm", "a296327f79cb1ec795b896698c56e662ed7210cc9eb31f0ab365eb3a62e2c589"},
   "tzdata": {:hex, :tzdata, "1.1.0", "72f5babaa9390d0f131465c8702fa76da0919e37ba32baa90d93c583301a8359", [:mix], [{:hackney, "~> 1.17", [hex: :hackney, repo: "hexpm", optional: false]}], "hexpm", "18f453739b48d3dc5bcf0e8906d2dc112bb40baafe2c707596d89f3c8dd14034"},
   "unicode_util_compat": {:hex, :unicode_util_compat, "0.7.0", "bc84380c9ab48177092f43ac89e4dfa2c6d62b40b8bd132b1059ecc7232f9a78", [:rebar3], [], "hexpm", "25eee6d67df61960cf6a794239566599b09e17e668d3700247bc498638152521"},
+  "webdavex": {:hex, :webdavex, "0.3.3", "90c76c3a641a36bfe4bed5f75d8f1beac6e349947029a77cbd66cf37c38d9177", [:mix], [{:hackney, "~> 1.0", [hex: :hackney, repo: "hexpm", optional: false]}], "hexpm", "e77f81a55357c6bd1e30a1902a36f9223ec7a17e63ca7781a0ba4989f34e09da"},
 }

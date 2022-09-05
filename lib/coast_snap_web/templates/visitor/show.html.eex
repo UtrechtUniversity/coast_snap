@@ -1,5 +1,9 @@
 <div class="page">
 
-    <%= raw(show(@page, @country)) %>
+    <%= if not is_nil(@page) and @page.status == "hidden" do %>
+        <h3>Coming soon...</h3>
+    <% else %>
+        <%= raw(show(@page, @country)) %>
+    <% end %>
 
 </div>

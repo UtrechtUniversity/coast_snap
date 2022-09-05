@@ -30,8 +30,8 @@
 
       <div class="top-bar">
         <nav class="left">
-          <div class="title-bar" data-responsive-toggle="main-nav" data-hide-for="medium">
-            <button class="menu-icon" type="button" data-toggle="main-nav"></button>
+          <div class="title-bar hide-for-medium">
+            <button class="menu-icon" type="button"></button>
           </div>
           <%= if assigns[:tree] do %>
             <%= generate_nav(@conn, @tree) %>
