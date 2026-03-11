@@ -94,7 +94,7 @@ defmodule CoastSnap.GenServers.YodaTransfer do
             # check status
             status = Map.get(new_file_object, :status)
             # see if we need to create parent folders and send again
-            new_file_object = if status == :http_403 do
+            new_file_object = if status in [:http_403, :http_500, :closed] do
                 ensure_parent_folders(new_file_object)
                 transfer_file(new_file_object)
             else
@@ -112,41 +112,51 @@ defmodule CoastSnap.GenServers.YodaTransfer do
     end
 
 
-    # ensure parent folders on Yoda if file transfer was unsuccessful
     defp ensure_parent_folders(file_object) do
         %{ target_path: target_path } = file_object
-        # first one is a blank
+        config = Agent.get(YodaClient, fn state -> state end)
+        base = URI.to_string(config.base_url)
+        headers = config.headers ++ [{"Expect", ""}]
         [ _ | parents ] = String.split(target_path, "/")
-        # and we don't want the filename
         parents = List.delete_at(parents, length(parents)-1)
-        # follow folder structure from root to nested folders, and create
-        # if necessary
         Enum.reduce parents, "", fn folder_name, acc ->
             target_folder = "#{acc}/#{folder_name}"
-            # check if folder exists
-            { _result, response } = YodaClient.head(target_folder)
-            case response == :http_404 do
-                true -> YodaClient.mkcol(target_folder)
-                false -> :ok
+            url = base <> target_folder
+            result = :hackney.request(:head, url, headers, "", [connect_timeout: 20_000])
+            status = case result do
+                {:ok, s, _} -> s
+                {:ok, s, _, _} -> s
+                _ -> :error
+            end
+            if status == 404 do
+                :hackney.request(:mkcol, url, headers, "", [connect_timeout: 20_000])
             end
             target_folder
         end
         :ok
     end
 
-    # try to transfer the file to Yoda
     defp transfer_file(file_object) do
         %{ src_path: source_path, target_path: target_path } = file_object
-        # check if file exists
         { _result, response } = YodaClient.head(target_path)
-        # if exists do nothing
         { _, response } = case is_list(response) do
             true -> { :ok, :already_exists }
-            false -> YodaClient.put(target_path, { :file, source_path })
+            false ->
+                config = Agent.get(YodaClient, fn state -> state end)
+                url = URI.to_string(config.base_url) <> target_path
+                headers = config.headers ++ [{"Expect", ""}]
+                body = File.read!(source_path)
+                result = :hackney.request(:put, url, headers, body, [connect_timeout: 20_000])
+                case result do
+                    {:ok, status, _h, _r} when status in [200, 201, 204] -> {:ok, :ok}
+                    {:ok, 403, _h, _r} -> {:error, :http_403}
+                    {:ok, 500, _h, _r} -> {:error, :http_500}
+                    {:ok, status, _h, _r} -> {:error, :"http_#{status}"}
+                    error -> error
+                end
         end
         Map.put(file_object, :status, response)
     end
-
 
     defp filetree(dir, result \\ []) do
         Enum.reduce(File.ls!(dir), result, fn file, acc ->
